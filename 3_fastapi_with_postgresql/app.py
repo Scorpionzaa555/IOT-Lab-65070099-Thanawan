@@ -57,14 +57,17 @@ async def create_book(book: dict, response: Response, db: Session = Depends(get_
 # async def delete_book(book_id: int, db: Session = Depends(get_db)):
 #     pass
 
+# Show student info
 @router_v1.get('/students')
 async def get_students(db: Session = Depends(get_db)):
     return db.query(models.Student).all()
 
+# Show Student info follow id
 @router_v1.get('/students/{student_id}')
 async def get_students(id: int, db: Session = Depends(get_db)):
     return db.query(models.Student).filter(models.Student.id == id).first()
 
+# create new student
 @router_v1.post('/students')
 async def create_student(student: dict, response: Response, db: Session = Depends(get_db)):
     # TODO: Add validation
@@ -75,6 +78,7 @@ async def create_student(student: dict, response: Response, db: Session = Depend
     response.status_code = 201
     return newstudent
 
+# update student
 @router_v1.patch('/students/{student_id}')
 # app.include_router(router_v1)
 async def update_student(id: int, student: dict, db: Session = Depends(get_db)):
@@ -83,15 +87,15 @@ async def update_student(id: int, student: dict, db: Session = Depends(get_db)):
             setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)
-    # response.status_code = 201
     return db_item
 
+# delete student
 @router_v1.delete('/students/{student_id}')
 async def delete_student(id: int, db: Session = Depends(get_db)):
     db_item = db.query(models.Student).filter(models.Student.id == id).first()
     db.delete(db_item)
     db.commit()
-    return "Delete successfully!!!"
+    return "Delete successfully!!! Woo!!!"
 
 app.include_router(router_v1)
 
